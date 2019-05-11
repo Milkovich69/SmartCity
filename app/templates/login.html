@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+
+{% block app_content %}
+<div class="container">
+    <div class="d-flex justify-content-center h-100">
+        <div class="card" style="height: 400px; width: 500px;">
+            <div class="card-header">
+                <h3 style="margin-left: 30px;margin-top: 30px; padding-top: 50px;">Вход</h3>
+                <div class="d-flex justify-content-end social_icon">
+                    <span><i class="fab fa-facebook-square"></i></span>
+                    <span><i class="fab fa-google-plus-square"></i></span>
+                    <span><i class="fab fa-twitter-square"></i></span>
+                </div>
+            </div>
+            <div class="card-body">
+                <form action="" method="post" style="margin-left: 30px;">
+                    {{ form.hidden_tag() }}
+                    <div class="input-group form-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                        </div>
+                        {{ form.username(size=32) }}
+
+                    </div>
+                    <div class="input-group form-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-key"></i></span>
+                        </div>
+                        {{ form.password(size=32) }}
+                    </div>
+                    <div class="row align-items-center remember">
+                        <p>{{ form.remember_me() }}Запомнить меня</p>
+                    </div>
+                    <div class="form-group" style=" padding-top: 10px;">
+                        <input type="submit" value="Войти" class="btn float-right login_btn">
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer">
+                <div class="d-flex justify-content-center links" style="margin-left: 30px;" color="white">
+                    <p>Забыли пароль?
+                        <a href="..{{ url_for('reset_password_request', filename='style.css') }}">Восстановить</a>
+                    </p>
+                </div>
+                <div class="d-flex justify-content-center links" style="margin-left: 30px;" color="white">
+                    <p>Новый пользователь?<a href="..{{ url_for('register', filename='style.css') }}">Жми для
+                        регистрации!</a></p>
+                </div>
+                <div class="d-flex justify-content-center links" style="margin-left: 30px;margin-right: 20px;">
+                    <p>У вас успешная компания и вы хотите предложить свое мероприятие?
+                        <a href="oops/">Жми сюда!</a></p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+

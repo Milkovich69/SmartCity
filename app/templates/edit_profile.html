@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+<div class="container">
+    <div class="d-flex justify-content-center h-100">
+        <div class="card" style="height: 420px;width: 500px;">
+            <div class="card-header" style="width: 500px;">
+                <h1 style=" margin-left: 30px; margin-top: 30px;">Редактирование профиля</h1>
+                <form action="" method="post" style="margin-left: 30px;">
+                    {{ form.hidden_tag() }}
+                    <p>
+                        {{ form.username.label }}<br>
+                        {{ form.username(size=32) }}<br>
+                        {% for error in form.username.errors %}
+                        <span style="color: red;">[{{ error }}]</span>
+                        {% endfor %}
+                    </p>
+                    <p>
+                        {{ form.last_name.label }}<br>
+                        {{ form.last_name(size=32) }}<br>
+                        {% for error in form.last_name.errors %}
+                        <span style="color: red;">[{{ error }}]</span>
+                        {% endfor %}
+                    </p>
+                    <p>
+                        {{ form.first_name.label }}<br>
+                        {{ form.first_name(size=32) }}<br>
+                        {% for error in form.first_name.errors %}
+                        <span style="color: red;">[{{ error }}]</span>
+                        {% endfor %}
+                    </p>
+                    <p>
+                        {{ form.date.label }}<br>
+                        {{ form.date(size=32) }}<br>
+                        {% for error in form.date.errors %}
+                        <span style="color: red;">[{{ error }}]</span>
+                        {% endfor %}
+                    </p>
+
+                    <p><input type="submit" value="Сохранить" class="btn float-right login_btn"></p>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

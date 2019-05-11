@@ -1,0 +1,52 @@
+{% extends 'bootstrap/base.html' %}
+
+{% block title %}
+{% if title %}{{ title }} - SmartCity{% else %}Welcome to SmartCity{% endif %}
+{% endblock %}
+
+{% block navbar %}
+
+<link rel="stylesheet" type="text/css" href="..{{ url_for('static', filename='style.css') }}"/>
+<nav class="navbar navbar-default">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{{ url_for('index') }}">SmartCity</a>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li><a href="{{ url_for('index') }}">Домой</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                {% if current_user.is_anonymous %}
+                <li><a href="{{ url_for('login') }}">Вход</a></li>
+                {% else %}
+                <li><a href="{{ url_for('user', username=current_user.username) }}">Мой профиль</a></li>
+                <li><a href="{{ url_for('logout') }}">Выход</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+
+<style>
+/* demo style */
+.panel-footer:nth-child(2){color:rgba(255,215,0,1.0)}
+button[data-toggle]:hover{color:rgba(255,23,0,1.0)}
+/* end demo style */
+
+</style>
+<div class="container">
+    {# содержимое приложения которое должно быть предоставлено в блоке app_content #}
+    {% block app_content %}{% endblock %}
+</div>
+{% endblock %}

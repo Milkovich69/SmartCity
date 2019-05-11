@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block app_content %}
+<div class="container">
+    <div class="d-flex justify-content-center h-100">
+        <div class="card" style="height: 600px;width: 630px;">
+            <div class="card-header"
+                 style="width: 600px;margin-top: 30px;margin-left: 30px;border-top-width: 30px;border-left-width: 30px;height: 600px;">
+                <h1 style="margin-top: 30px; border-top-width: 30px; padding-top: 20px;s">Регистрация</h1>
+
+                <form action="" method="post">
+                    {{ form.hidden_tag() }}
+                    <p>
+                        {{ form.username.label }}<br>
+                        {{ form.username(size=32) }}<br>
+                        {% for error in form.username.errors %}
+                        <span style="color: red;">[{{ error }}]</span>
+                        {% endfor %}
+                    </p>
+                    <p>
+                        {{ form.email.label }}<br>
+                        {{ form.email(size=45) }}<br>
+                        {% for error in form.email.errors %}
+                        <span style="color: red;">[{{ error }}]</span>
+                        {% endfor %}
+                    </p>
+                    <p>
+                        {{ form.last_name.label }}<br>
+                        {{ form.last_name(size=45) }}<br>
+                        {% for error in form.last_name.errors %}
+                        <span style="color: red;">[{{ error }}]</span>
+                        {% endfor %}
+                    </p>
+                    <p>
+                        {{ form.first_name.label }}<br>
+                        {{ form.first_name(size=45) }}<br>
+                        {% for error in form.first_name.errors %}
+                        <span style="color: red;">[{{ error }}]</span>
+                        {% endfor %}
+                    </p>
+                    <p>
+                        {{ form.date.label }}<br>
+                        {{ form.date(size=32) }}<br>
+                        {% for error in form.date.errors %}
+                        <span style="color: red;">[{{ error }}]</span>
+                        {% endfor %}
+                    </p>
+                    <p>
+                        {{ form.password.label }}<br>
+                        {{ form.password(size=32) }}<br>
+                        {% for error in form.password.errors %}
+                        <span style="color: red;">[{{ error }}]</span>
+                        {% endfor %}
+                    </p>
+                    <p>
+                        {{ form.password2.label }}<br>
+                        {{ form.password2(size=32) }}<br>
+                        {% for error in form.password2.errors %}
+                        <span style="color: red;">[{{ error }}]</span>
+                        {% endfor %}
+                    </p>
+                    <p><input type="submit" value="Регистрация" class="btn float-right login_btn"></p>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
