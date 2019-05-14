@@ -1,6 +1,20 @@
 {% extends "base.html" %}
 
 {% block app_content %}
-    <h1>Упс! Страница не найдена!</h1>
-    <p><a href="{{ url_for('index') }}">Назад</a></p>
+<div class="container">
+    <div class="d-flex justify-content-center h-100">
+        <div class="card" style="height: 200px; width: 530px;">
+            <div class="card-header">
+            </div>
+            <div class="card-body">
+                <h1 style="color: white; margin-left: 30px;margin-top: 30px; padding-top: 50px;">Упс! Страница не найдена!</h1>
+            </div>
+            <div class="card-footer">
+                <div class="d-flex justify-content-center links" style="margin-left: 30px;" color="white">
+                    <p><a href="..{{ url_for('index', filename='style.css') }}">Назад</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

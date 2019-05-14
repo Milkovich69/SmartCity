@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 from app import app, db
 from flask import render_template, flash, redirect, url_for, request
-from app.forms import LoginForm, RegistrationForm, EditProfileForm, ResetPasswordRequestForm, ResetPasswordForm
+from app.forms import LoginForm, RegistrationForm, EditProfileForm, ResetPasswordRequestForm, ResetPasswordForm, CompanyRegistrationForm
 from flask_login import current_user, login_user, logout_user, login_required
-from app.models import User, Event
+from app.models import User, Event, Company
 from werkzeug.urls import url_parse
 from app.email import send_password_reset_email
 
@@ -53,6 +53,20 @@ def register():
         flash('Поздравляем, теперь вы зарегистрированы!')
         return redirect(url_for('login'))
     return render_template('register.html', title='Регистрация', form=form)
+
+@app.route('/company_register', methods=['GET', 'POST'])
+def company_register():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    form = CompanyRegistrationForm()
+    if form.validate_on_submit():
+        company = Company(login_name=form.login_name.data)
+        company.set_password(form.password.data)
+        db.session.add(company)
+        db.session.commit()
+        flash('Поздравляем, теперь вы зарегистрированы!')
+        return redirect(url_for('login'))
+    return render_template('company_register.html', title='Регистрация предприятия', form=form)
 
 @app.route('/user/<username>')
 @login_required
