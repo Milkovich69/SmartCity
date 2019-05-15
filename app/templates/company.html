@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+<div class="container">
+    <div class="d-flex justify-content-center h-100">
+        <div class="card" style="height: 350px;width: 650px;margin-top: 40px;">
+            <div class="card-header" style="width: 600px;">
+                <table>
+                    <tr valign="top">
+                        <td style="padding-left: 30px;"><h1>Предприятие: {{ company.login_name }}</h1>
+                            {% if company.name %} <p>Название: {{ company.name }}</p>{% endif %}
+                            {% if company.email %} <p>Email: {{ company.email }}</p>{% endif %}
+                            {% if company.address %} <p>Адрес: {{ company.address }}</p>{% endif %}
+                            {% if company == current_user %}
+                            <p><a href="{{ url_for('edit_profile') }}" class="btn float-right login_btn">Редактировать профиль</a></p>
+                            <p>Мои мероприятия:</p>
+                            {% for event in events %}
+                            <p><b>{{ event.name }}</b></p>
+                            {% endfor %}
+                            {% endif %}
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

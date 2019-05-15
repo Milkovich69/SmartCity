@@ -5,9 +5,12 @@ from flask_migrate import Migrate
 from flask_login import LoginManager
 from flask_bootstrap import Bootstrap
 from flask_mail import Mail
+from flask_admin import Admin
+
 
 app = Flask(__name__)
 app.config.from_object(Config)
+admin = Admin(app)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 login = LoginManager(app)

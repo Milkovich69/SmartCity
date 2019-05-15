@@ -24,15 +24,13 @@ def login():
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
         company = Company.query.filter_by(login_name=form.username.data).first()
-        if (user is None or not user.check_password(form.password.data)) and (company is None or not company.check_password(form.password.data)):
-            print(user, company, user.check_password(form.password.data))
-            flash('Неверный логин или пароль')
-            return redirect(url_for('login'))
-
+        # if (user is None or not user.check_password(form.password.data)) and (company is None or not company.check_password(form.password.data)):
+        #     flash('Неверный логин или пароль')
+        #     return redirect(url_for('login'))
         if user is not None:
             login_user(user, remember=form.remember_me.data)
-        else:
-            login_user(company, remember=form.remember_me.data)
+        # else:
+        #     login_user(company, remember=form.remember_me.data)
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
             next_page = url_for('index')
@@ -82,6 +80,13 @@ def user(username):
     user = User.query.filter_by(username=username).first_or_404()
     events = current_user.followed_events
     return render_template('user.html', title='Мой профиль', user=user, events=events)
+
+@app.route('/company/<login_name>')
+@login_required
+def company(login_name):
+    company = Company.query.filter_by(login_name=login_name).first_or_404()
+    events = company.events
+    return render_template('company.html', title='Профиль предприятия', company=company, events=events)
 
 @app.route('/subs/<event>')
 @login_required
