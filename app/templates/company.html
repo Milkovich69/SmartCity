@@ -11,13 +11,10 @@
                             {% if company.name %} <p>Название: {{ company.name }}</p>{% endif %}
                             {% if company.email %} <p>Email: {{ company.email }}</p>{% endif %}
                             {% if company.address %} <p>Адрес: {{ company.address }}</p>{% endif %}
-                            {% if company == current_user %}
-                            <p><a href="{{ url_for('edit_profile') }}" class="btn float-right login_btn">Редактировать профиль</a></p>
-                            <p>Мои мероприятия:</p>
-                            {% for event in events %}
+                            <p>Mероприятия:</p>
+                            {% for event in company.events %}
                             <p><b>{{ event.name }}</b></p>
                             {% endfor %}
-                            {% endif %}
                         </td>
                     </tr>
                 </table>
