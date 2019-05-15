@@ -23,10 +23,16 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
-        if user is None or not user.check_password(form.password.data):
+        company = Company.query.filter_by(login_name=form.username.data).first()
+        if (user is None or not user.check_password(form.password.data)) and (company is None or not company.check_password(form.password.data)):
+            print(user, company, user.check_password(form.password.data))
             flash('Неверный логин или пароль')
             return redirect(url_for('login'))
-        login_user(user, remember=form.remember_me.data)
+
+        if user is not None:
+            login_user(user, remember=form.remember_me.data)
+        else:
+            login_user(company, remember=form.remember_me.data)
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
             next_page = url_for('index')
@@ -46,7 +52,8 @@ def register():
         return redirect(url_for('index'))
     form = RegistrationForm()
     if form.validate_on_submit():
-        user = User(username=form.username.data, email=form.email.data)
+        user = User(username=form.username.data, email=form.email.data, last_name=form.last_name.data,
+                    first_name=form.first_name.data, date=form.date.data)
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
@@ -60,7 +67,8 @@ def company_register():
         return redirect(url_for('index'))
     form = CompanyRegistrationForm()
     if form.validate_on_submit():
-        company = Company(login_name=form.login_name.data)
+        company = Company(login_name=form.login_name.data, email=form.email.data, name=form.name.data,
+                          address=form.address.data)
         company.set_password(form.password.data)
         db.session.add(company)
         db.session.commit()
@@ -110,7 +118,6 @@ def edit_profile():
                            form=form)
 
 @app.route('/oops/')
-
 def oops():
     return render_template('404.html')
 

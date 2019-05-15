@@ -32,8 +32,9 @@ class RegistrationForm(FlaskForm):
 
 class CompanyRegistrationForm(FlaskForm):
     login_name = StringField('Логин', validators=[DataRequired()])
-    address = StringField('Адрес')
+    email = StringField('Email', validators=[DataRequired(), Email()])
     name = StringField('Название')
+    address = StringField('Адрес')
     password = PasswordField('Пароль', validators=[DataRequired()])
     password2 = PasswordField(
         'Повторите пароль', validators=[DataRequired(), EqualTo('password')])
@@ -43,6 +44,11 @@ class CompanyRegistrationForm(FlaskForm):
         company = Company.query.filter_by(login_name=login_name.data).first()
         if company is not None:
             raise ValidationError('Пожалуйста, выберите другой логин.')
+
+    def validate_email(self, email):
+        company = Company.query.filter_by(email=email.data).first()
+        if company is not None:
+            raise ValidationError('Такой e-mail уже зарегистрирован, используйте другой.')
 
 class EditProfileForm(FlaskForm):
     username = StringField('Логин', validators=[DataRequired()])

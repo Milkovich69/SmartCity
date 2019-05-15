@@ -92,12 +92,13 @@ class Company(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     login_name = db.Column(db.String(64), index=True, unique=True)
     password_hash = db.Column(db.String(128))
+    email = db.Column(db.String(120), index=True, unique=True)
     name = db.Column(db.String(100), index=True)
     address = db.Column(db.String(100))
     events = db.relationship('Event', backref='sponsor', lazy='dynamic')
 
     def __repr__(self):
-        return '<Company {}>'.format(self.name)
+        return '<Company {}>'.format(self.login_name)
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
