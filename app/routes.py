@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 from app import app, db
 from flask import render_template, flash, redirect, url_for, request
-from app.forms import LoginForm, RegistrationForm, EditProfileForm, ResetPasswordRequestForm, ResetPasswordForm
+from app.forms import LoginForm, RegistrationForm, EditProfileForm, ResetPasswordRequestForm, ResetPasswordForm, CompanyRegistrationForm
 from flask_login import current_user, login_user, logout_user, login_required
-from app.models import User, Event
+from app.models import User, Event, Company
 from werkzeug.urls import url_parse
 from app.email import send_password_reset_email
 
@@ -46,20 +46,45 @@ def register():
         return redirect(url_for('index'))
     form = RegistrationForm()
     if form.validate_on_submit():
-        user = User(username=form.username.data, email=form.email.data)
+        user = User(username=form.username.data, email=form.email.data, last_name=form.last_name.data,
+                    first_name=form.first_name.data, date=form.date.data)
         user.set_password(form.password.data)
         db.session.add(user)
+        db.session.commit()
+        company = Company(id=user.id, agent_id=user.id)
+        db.session.add(company)
         db.session.commit()
         flash('Поздравляем, теперь вы зарегистрированы!')
         return redirect(url_for('login'))
     return render_template('register.html', title='Регистрация', form=form)
+
+
+@app.route('/company_register', methods=['GET', 'POST'])
+def company_register():
+    form = CompanyRegistrationForm()
+    if form.validate_on_submit():
+        company = Company.query.filter_by(agent_id=current_user.id).first()
+        print(company)
+        company.name = form.name.data
+        company.address = form.address.data
+        db.session.add(company)
+        db.session.commit()
+        flash('Предприятие зарегистрировано, теперь вы можете добавлять мероприятия!')
+        return redirect(url_for('company_register'))
+    elif request.method == 'GET':
+        company = Company.query.filter_by(agent_id=current_user.id).first()
+        form.name.data = company.name
+        form.address.data = company.address
+    return render_template('company_register.html', title='Регистрация предприятия', form=form)
+
 
 @app.route('/user/<username>')
 @login_required
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()
     events = current_user.followed_events
-    return render_template('user.html', title='Мой профиль', user=user, events=events)
+    company = Company.query.filter_by(agent_id=current_user.id).first()
+    return render_template('user.html', title='Мой профиль', user=user, events=events, company=company)
 
 @app.route('/subs/<event>')
 @login_required

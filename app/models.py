@@ -27,6 +27,7 @@ class User(UserMixin, db.Model):
     first_name = db.Column(db.String(50))
     date = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     sum_b = db.Column(db.Integer)
+    company = db.relationship('Company', backref='agent', lazy='dynamic')
 
     def avatar(self, size):
         digest = md5(self.email.lower().encode('utf-8')).hexdigest()
@@ -93,6 +94,7 @@ class Company(db.Model):
     name = db.Column(db.String(100), index=True)
     address = db.Column(db.String(100))
     events = db.relationship('Event', backref='sponsor', lazy='dynamic')
+    agent_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     def __repr__(self):
         return '<Company {}>'.format(self.name)

@@ -30,6 +30,13 @@ class RegistrationForm(FlaskForm):
         if user is not None:
             raise ValidationError('Такой e-mail уже зарегистрирован, используйте другой.')
 
+
+class CompanyRegistrationForm(FlaskForm):
+    name = StringField('Название')
+    address = StringField('Адрес')
+    submit = SubmitField('Регистрация')
+
+
 class EditProfileForm(FlaskForm):
     username = StringField('Логин', validators=[DataRequired()])
     last_name = StringField('Фамилия')
