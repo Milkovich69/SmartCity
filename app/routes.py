@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from app import app, db
 from flask import render_template, flash, redirect, url_for, request
-from app.forms import LoginForm, RegistrationForm, EditProfileForm, ResetPasswordRequestForm, ResetPasswordForm, CompanyRegistrationForm
+from app.forms import LoginForm, RegistrationForm, EditProfileForm, ResetPasswordRequestForm, ResetPasswordForm, \
+    CompanyRegistrationForm, EventRegistrationForm
 from flask_login import current_user, login_user, logout_user, login_required
 from app.models import User, Event, Company
 from werkzeug.urls import url_parse
@@ -70,12 +71,22 @@ def company_register():
         db.session.add(company)
         db.session.commit()
         flash('Предприятие зарегистрировано, теперь вы можете добавлять мероприятия!')
-        return redirect(url_for('company_register'))
-    elif request.method == 'GET':
-        company = Company.query.filter_by(agent_id=current_user.id).first()
-        form.name.data = company.name
-        form.address.data = company.address
+        return redirect(url_for('user', username=current_user.username))
     return render_template('company_register.html', title='Регистрация предприятия', form=form)
+
+
+@app.route('/event_register', methods=['GET', 'POST'])
+def event_register():
+    form = EventRegistrationForm()
+    if form.validate_on_submit():
+        company = Company.query.filter_by(agent_id=current_user.id).first()
+        event = Event(name=form.name.data, place=form.place.data, date_event=form.date_event.data,
+                      b_count=form.b_count.data, company_id=company.id)
+        db.session.add(event)
+        db.session.commit()
+        flash('Мероприятие добавлено!')
+        return redirect(url_for('company', id=company.id))
+    return render_template('event_register.html', title='Добавление мероприятия', form=form)
 
 
 @app.route('/user/<username>')
@@ -85,6 +96,15 @@ def user(username):
     events = current_user.followed_events
     company = Company.query.filter_by(agent_id=current_user.id).first()
     return render_template('user.html', title='Мой профиль', user=user, events=events, company=company)
+
+
+@app.route('/company/<id>')
+@login_required
+def company(id):
+    company = Company.query.filter_by(id=id).first_or_404()
+    events = Event.query.filter_by(company_id=company.id).all()
+    return render_template('company.html', title='Профиль предприятия', company=company, events=events)
+
 
 @app.route('/subs/<event>')
 @login_required
@@ -111,7 +131,7 @@ def edit_profile():
         current_user.date = form.date.data
         db.session.commit()
         flash('Изменения сохранены.')
-        return redirect(url_for('edit_profile'))
+        return redirect(url_for('user', username=current_user.username))
     elif request.method == 'GET':
         form.username.data = current_user.username
         form.last_name.data = current_user.last_name

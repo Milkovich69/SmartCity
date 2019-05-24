@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, DateField
+from wtforms import IntegerField, StringField, PasswordField, BooleanField, SubmitField, DateField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
 from app.models import User
 
@@ -35,6 +35,14 @@ class CompanyRegistrationForm(FlaskForm):
     name = StringField('Название')
     address = StringField('Адрес')
     submit = SubmitField('Регистрация')
+
+
+class EventRegistrationForm(FlaskForm):
+    name = StringField('Название')
+    place = StringField('Место проведения')
+    date_event = DateField('Дата проведения', format='%d.%m.%Y')
+    b_count = IntegerField('Количество баллов за участие')
+    submit = SubmitField('Добавить')
 
 
 class EditProfileForm(FlaskForm):

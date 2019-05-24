@@ -3,7 +3,7 @@
 {% block app_content %}
 <div class="container">
     <div class="d-flex justify-content-center h-100">
-        <div class="card" style="height: 450px;width: 650px;margin-top: 40px;">
+        <div class="card" style="height: 420px;width: 650px;margin-top: 40px;">
             <div class="card-header" style="width: 600px;">
                 <table>
                     <tr valign="top">
@@ -18,9 +18,13 @@
                                 <p><a href="{{ url_for('company_register') }}" class="btn float-right login_btn">Зарегистрировать свое предприятие</a></p>
                             {% endif %}
                             {% if company.name %}
-                                <p>Мои предприятия: {{ company.name }} </p>
+                                <div class="d-flex justify-content-center links" style="margin-left: 30px;" color="white">
+                                    <p> Мое предприятие:
+                                        <a href="{{ url_for('company', id=company.id, filename='style.css') }}">{{ company.name }}</a>
+                                    </p>
+                                </div>
                             {% endif %}
-                            <p>Мои мероприятия:</p>
+                            <p>Мероприятия, в которых я хочу участвовать:</p>
                             {% for event in events %}
                             <p><b>{{ event.name }}</b></p>
                             {%endfor%}

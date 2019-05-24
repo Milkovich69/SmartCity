@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+<div class="container">
+    <div class="d-flex justify-content-center h-100">
+        <div class="card" style="height: 200px;width: 650px;margin-top: 40px;">
+            <div class="card-header" style="width: 600px;">
+                <table>
+                    <tr valign="top">
+                        <td style="padding-left: 30px;"><h1>Предприятие: {{ company.name }}</h1>
+                            {% if company.address %} <p>Адрес: {{ company.address }}</p> {% endif %}
+                            {% if not events %} <p>Пока нет ни одного мероприятия</p>
+                            {% else %} <p>Mероприятия:
+                            {% for event in events %}
+                                <b>{{ event.name }}</b></p>
+                            {% endfor %}
+                            {% endif %}
+                            {% if company.agent_id == current_user.id %}
+                                <p><a href="{{ url_for('event_register') }}" class="btn float-right login_btn">Добавить мероприятие</a></p>
+                            {% endif %}
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

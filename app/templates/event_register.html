@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block app_content %}
+<div class="container">
+    <div class="d-flex justify-content-center h-100">
+        <div class="card" style="height: 400px;width: 630px;">
+            <div class="card-header"
+                 style="width: 600px;margin-top: 30px;margin-left: 30px;border-top-width: 30px;border-left-width: 30px;height: 600px;">
+                <h1 style="margin-top: 30px; border-top-width: 30px; padding-top: 20px;s">Добавление мероприятия</h1>
+
+                <form action="" method="post">
+                    {{ form.hidden_tag() }}
+                    <p>
+                        {{ form.name.label }}<br>
+                        {{ form.name(size=45) }}<br>
+                        {% for error in form.name.errors %}
+                        <span style="color: red;">[{{ error }}]</span>
+                        {% endfor %}
+                    </p>
+                    <p>
+                        {{ form.place.label }}<br>
+                        {{ form.place(size=45) }}<br>
+                        {% for error in form.place.errors %}
+                        <span style="color: red;">[{{ error }}]</span>
+                        {% endfor %}
+                    </p>
+                    <p>
+                        {{ form.date_event.label }}<br>
+                        {{ form.date_event(size=45) }}<br>
+                        {% for error in form.date_event.errors %}
+                        <span style="color: red;">[{{ error }}]</span>
+                        {% endfor %}
+                    </p>
+                    <p>
+                        {{ form.b_count.label }}<br>
+                        {{ form.b_count(size=45) }}<br>
+                        {% for error in form.b_count.errors %}
+                        <span style="color: red;">[{{ error }}]</span>
+                        {% endfor %}
+                    </p>
+                    <p><input type="submit" value="Добавить" class="btn float-right login_btn"></p>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
