@@ -3,12 +3,15 @@
 {% block app_content %}
 <div class="container">
     <div class="d-flex justify-content-center h-100">
-        <div class="card" style="height: 420px;width: 650px;margin-top: 40px;">
-            <div class="card-header" style="width: 600px;">
+        <div class="card" style="height: 420px;width: 800px;margin-top: 40px;">
+            <div class="card-header" style="width: 800px;">
                 <table>
                     <tr valign="top">
                         <td><img src="{{ user.avatar(128) }}" style=" margin-left: 30px; margin-top: 30px;"></td>
                         <td style="padding-left: 30px;"><h1>Пользователь: {{ user.username }}</h1>
+                            {% if user == current_user %}
+                            <p class="p111" style=" color: orange;">На данный момент у вас: {%if not current_user.sum_b %} 0 {% endif %} баллов</p>
+                            {% endif %}
                             {% if user.last_name %} <p>Фамилия: {{ user.last_name }}</p>{% endif %}
                             {% if user.first_name %} <p>Имя: {{ user.first_name }}</p>{% endif %}
                             {% if user.date %} <p>Дата рождения: {{ user.date }}</p>{% endif %}
@@ -16,20 +19,24 @@
                             <p><a href="{{ url_for('edit_profile') }}" class="btn float-right login_btn">Редактировать профиль</a></p>
                             {% if not company.name %}
                                 <p><a href="{{ url_for('company_register') }}" class="btn float-right login_btn">Зарегистрировать свое предприятие</a></p>
-                            {% endif %}
+                            {% endif %} {% endif %}
                             {% if company.name %}
                                 <div class="d-flex justify-content-center links" style="margin-left: 30px;" color="white">
                                     <p> Мое предприятие:
-                                        <a href="{{ url_for('company', id=company.id, filename='style.css') }}">{{ company.name }}</a>
+                                        <b><a href="{{ url_for('company', id=company.id) }}">{{ company.name }}</a></b>
                                     </p>
                                 </div>
                             {% endif %}
+                            <div class="d-flex justify-content-center links" style="margin-left: 30px;" color="white">
                             <p>Мероприятия, в которых я хочу участвовать:</p>
                             {% for event in events %}
-                            <p><b>{{ event.name }}</b></p>
+                            <p><b><a href="{{ url_for('event', id=event.id) }}">{{ event.name }}</a></b>
+                                    {% if current_user.is_following(event.id) and user == current_user %}
+                                    <b><a href="unsubs/{{event.id}}" class="btn float-right login_btn">Отписаться</a></b>
+                                    {% endif %}
+                            </p>
                             {%endfor%}
-                            <p>На данный момент у вас: {%if not current_user.sum_b %} 0 {% endif %} баллов</p>
-                            {% endif %}
+                            </div>
                         </td>
                     </tr>
                 </table>

@@ -106,16 +106,59 @@ def company(id):
     return render_template('company.html', title='Профиль предприятия', company=company, events=events)
 
 
+@app.route('/event/<id>')
+@login_required
+def event(id):
+    event = Event.query.filter_by(id=id).first_or_404()
+    users = []
+    companies = []
+    for u in event.followers:
+        users.append(u)
+    for c in event.sponsor.events:
+        if c.id != event.id:
+            companies.append(c)
+    print(companies)
+    return render_template('event.html', title='Мероприятие', event=event, users=users, companies=companies, len=len(companies))
+
+
+@app.route('/company/subs/<event>')
+@login_required
+def subs1(event):
+    current_user.follow(event)
+    db.session.commit()
+    return redirect(url_for('user', username=current_user.username))
+
+@app.route('/user/subs/<event>')
+@login_required
+def subs2(event):
+    current_user.follow(event)
+    db.session.commit()
+    return redirect(url_for('user', username=current_user.username))
+
 @app.route('/subs/<event>')
 @login_required
-def subs(event):
+def subs3(event):
     current_user.follow(event)
     db.session.commit()
     return redirect(url_for('index'))
 
+@app.route('/company/unsubs/<event>')
+@login_required
+def unsubs1(event):
+    current_user.unfollow(event)
+    db.session.commit()
+    return redirect(url_for('user', username=current_user.username))
+
+@app.route('/user/unsubs/<event>')
+@login_required
+def unsubs2(event):
+    current_user.unfollow(event)
+    db.session.commit()
+    return redirect(url_for('user', username=current_user.username))
+
 @app.route('/unsubs/<event>')
 @login_required
-def unsubs(event):
+def unsubs3(event):
     current_user.unfollow(event)
     db.session.commit()
     return redirect(url_for('index'))

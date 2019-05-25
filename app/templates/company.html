@@ -3,21 +3,35 @@
 {% block app_content %}
 <div class="container">
     <div class="d-flex justify-content-center h-100">
-        <div class="card" style="height: 200px;width: 650px;margin-top: 40px;">
-            <div class="card-header" style="width: 600px;">
+        <div class="card" style="height: 300px;width: 800px;margin-top: 40px;">
+            <div class="card-header" style="width: 800px;">
                 <table>
                     <tr valign="top">
                         <td style="padding-left: 30px;"><h1>Предприятие: {{ company.name }}</h1>
                             {% if company.address %} <p>Адрес: {{ company.address }}</p> {% endif %}
                             {% if not events %} <p>Пока нет ни одного мероприятия</p>
-                            {% else %} <p>Mероприятия:
+                            {% else %}
+                            <div class="d-flex justify-content-center links" style="margin-left: 30px;" color="white">
+                                <p>Mероприятия:</p>
                             {% for event in events %}
-                                <b>{{ event.name }}</b></p>
+                                <p><b><a href="{{ url_for('event', id=event.id) }}">{{ event.name }}</a></b>
+                                {% if not current_user.is_following(event.id) %}
+                                <b><a href="subs/{{event.id}}" class="btn float-right login_btn">Подписаться</a></b>
+                                    {% endif %}
+                                    {% if current_user.is_following(event.id) %}
+                                    <b><a href="unsubs/{{event.id}}" class="btn float-right login_btn">Отписаться</a></b>
+                                    {% endif %}
+                                </p>
                             {% endfor %}
+                            </div>
                             {% endif %}
+                            <div class="panel-collapse collapse in">
+                            <div class="panel-body">
                             {% if company.agent_id == current_user.id %}
                                 <p><a href="{{ url_for('event_register') }}" class="btn float-right login_btn">Добавить мероприятие</a></p>
                             {% endif %}
+                            </div>
+                            </div>
                         </td>
                     </tr>
                 </table>

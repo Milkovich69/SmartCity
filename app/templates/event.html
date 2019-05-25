@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+<div class="container">
+    <div class="d-flex justify-content-center h-100">
+        <div class="card" style="height: 400px;width: 800px;margin-top: 40px;">
+            <div class="card-header" style="width: 800px;">
+                <table>
+                    <tr valign="top">
+                        <td style="padding-left: 30px;"><h1>Мероприятие: {{ event.name }}</h1>
+                            <div class="d-flex justify-content-center links" style="margin-left: 30px;" color="white">
+                                <h3>Организатор:
+                                    <a href="{{ url_for('company', id=event.company_id) }}">{{ event.sponsor.name }}</a></h3>
+                            </div>
+                            {% if event.place %} <p>Место проведения: {{ event.place }}</p> {% endif %}
+                            {% if event.date_event %} <p>Дата проведения: {{ event.date_event }}</p> {% endif %}
+                            {% if event.b_count %} <p>Баллы за участие: {{ event.b_count }}</p> {% endif %}
+                            <div class="d-flex justify-content-center links" style="margin-left: 30px;" color="white">
+                                {% if not users %} <p>Пока нет ни одного подписчика</p>
+                                {% else %} <p>Подписчики:</p>
+                                {% for user in users %}
+                                    <p><b><a href="{{ url_for('user', username=user.username) }}"> {{ user.username }}</a></b></p>
+                                {% endfor %}
+                                {% endif %}
+                            </div>
+                            {% if len>0 %}
+                            <div class="d-flex justify-content-center links" style="margin-left: 30px;" color="white">
+                            <p>Другие мероприятия этой организации:</p>
+                            {% for c in companies %}
+                                <p><b><a href="{{ url_for('event', id=c.id) }}"> {{ c.name }}</a></b></p>
+                            {% endfor %}
+                            {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

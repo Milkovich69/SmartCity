@@ -4,8 +4,11 @@
 
 
 {% block app_content %}
-<h1 style=" color: black; margin-left: 30px;"> Привет, {{ current_user.username }}! Ты можешь участвовать в городских мероприятиях и получать баллы, которые можно обменять на бонусы!</h1>
-{% for event in f_events %}
+<h1 style="text-align:center; color: black; margin-left: 30px;">
+    Привет, {{ current_user.first_name }}!
+    Ты можешь участвовать в городских мероприятиях и получать баллы, которые можно обменять на бонусы!
+</h1>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,33 +19,36 @@
 
 
     <div class="container">
+        {% for event in f_events %}
         <div class="row">
         <div class="card" style =" width: 1150px; height: 330px;">
             <div class="col-md-12" style="margin-bottom: 30px;">
                     <div class="panel-heading">
-
-
-                        <div><p><b>{{ event.sponsor.name }}</b> проводит мероприятие под названием: <b> {{ event.name }} </b>
+                        <div class="d-flex justify-content-center links" style="margin-left: 30px;" color="white">
+                            <h4><b><a href="{{ url_for('company', id=event.company_id) }}">{{ event.sponsor.name }}</a></b>
+                                проводит мероприятие под названием:
+                                <b><a href="{{ url_for('event', id=event.id) }}">{{ event.name }}</a></b></h4>
                             <p class="p111" style=" color: orange; font-size: 15pt;"><b>{{ event.b_count }} баллов</b></p>
                         </div>
                         <div class="panel-collapse collapse in">
                             <div class="panel-body">
                                 <img src="https://images.unsplash.com/photo-1555881467-9390d4d1cb9c?ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80" width="50" height="200"
                                      alt="Пример 1" class="col-md-4"/>
-                                <p>Описание мероприятия</p>
+                                <p>Место проведения: {{ event.place }}</p>
                                 <p>Дата проведения:  {{ event.date_event }}</p>
                                 {% if not current_user.is_following(event.id) %}
                                 <b><a href="subs/{{event.id}}" class="btn float-right login_btn">Подписаться</a></b>
                                     {% endif %}
                                     {% if current_user.is_following(event.id) %}
                                     <b><a href="unsubs/{{event.id}}" class="btn float-right login_btn">Отписаться</a></b></div>
-                            {% endif %}
+                                    {% endif %}
                         </div>
-                        </div>
+
                     </div>
             </div>
-
+        </div>
         </div><!-- /.row -->
+        {% endfor %}
     </div><!-- /.container -->
 
     <script>
@@ -51,5 +57,5 @@ $(this).parent().next().collapse('toggle');
 });
 
     </script>
-    {% endfor %}
+
     {% endblock %}

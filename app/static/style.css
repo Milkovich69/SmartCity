@@ -43,6 +43,10 @@ color: white;
 cursor: pointer;
 }
 
+.card-header h4{
+color: white;
+}
+
 .card-header h3{
 color: white;
 }
