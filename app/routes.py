@@ -121,44 +121,17 @@ def event(id):
     return render_template('event.html', title='Мероприятие', event=event, users=users, companies=companies, len=len(companies))
 
 
-@app.route('/company/subs/<event>')
-@login_required
-def subs1(event):
-    current_user.follow(event)
-    db.session.commit()
-    return redirect(url_for('user', username=current_user.username))
-
-@app.route('/user/subs/<event>')
-@login_required
-def subs2(event):
-    current_user.follow(event)
-    db.session.commit()
-    return redirect(url_for('user', username=current_user.username))
-
 @app.route('/subs/<event>')
 @login_required
-def subs3(event):
+def subs(event):
     current_user.follow(event)
     db.session.commit()
     return redirect(url_for('index'))
 
-@app.route('/company/unsubs/<event>')
-@login_required
-def unsubs1(event):
-    current_user.unfollow(event)
-    db.session.commit()
-    return redirect(url_for('user', username=current_user.username))
-
-@app.route('/user/unsubs/<event>')
-@login_required
-def unsubs2(event):
-    current_user.unfollow(event)
-    db.session.commit()
-    return redirect(url_for('user', username=current_user.username))
 
 @app.route('/unsubs/<event>')
 @login_required
-def unsubs3(event):
+def unsubs(event):
     current_user.unfollow(event)
     db.session.commit()
     return redirect(url_for('index'))

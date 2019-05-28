@@ -30,11 +30,7 @@
                             <div class="d-flex justify-content-center links" style="margin-left: 30px;" color="white">
                             <p>Мероприятия, в которых я хочу участвовать:</p>
                             {% for event in events %}
-                            <p><b><a href="{{ url_for('event', id=event.id) }}">{{ event.name }}</a></b>
-                                    {% if current_user.is_following(event.id) and user == current_user %}
-                                    <b><a href="unsubs/{{event.id}}" class="btn float-right login_btn">Отписаться</a></b>
-                                    {% endif %}
-                            </p>
+                            <p><b><a href="{{ url_for('event', id=event.id) }}">{{ event.name }}</a></b></p>
                             {%endfor%}
                             </div>
                         </td>

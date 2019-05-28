@@ -14,14 +14,7 @@
                             <div class="d-flex justify-content-center links" style="margin-left: 30px;" color="white">
                                 <p>Mероприятия:</p>
                             {% for event in events %}
-                                <p><b><a href="{{ url_for('event', id=event.id) }}">{{ event.name }}</a></b>
-                                {% if not current_user.is_following(event.id) %}
-                                <b><a href="subs/{{event.id}}" class="btn float-right login_btn">Подписаться</a></b>
-                                    {% endif %}
-                                    {% if current_user.is_following(event.id) %}
-                                    <b><a href="unsubs/{{event.id}}" class="btn float-right login_btn">Отписаться</a></b>
-                                    {% endif %}
-                                </p>
+                                <p><b><a href="{{ url_for('event', id=event.id) }}">{{ event.name }}</a></b></p>
                             {% endfor %}
                             </div>
                             {% endif %}
