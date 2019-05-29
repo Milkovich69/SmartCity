@@ -2,7 +2,7 @@
 from app import app, db
 from flask import render_template, flash, redirect, url_for, request
 from app.forms import LoginForm, RegistrationForm, EditProfileForm, ResetPasswordRequestForm, ResetPasswordForm, \
-    CompanyRegistrationForm, EventRegistrationForm
+    CompanyRegistrationForm, EventRegistrationForm, AccrualPointsForm
 from flask_login import current_user, login_user, logout_user, login_required
 from app.models import User, Event, Company
 from werkzeug.urls import url_parse
@@ -65,7 +65,6 @@ def company_register():
     form = CompanyRegistrationForm()
     if form.validate_on_submit():
         company = Company.query.filter_by(agent_id=current_user.id).first()
-        print(company)
         company.name = form.name.data
         company.address = form.address.data
         db.session.add(company)
@@ -111,14 +110,14 @@ def company(id):
 def event(id):
     event = Event.query.filter_by(id=id).first_or_404()
     users = []
-    companies = []
+    other_events = []
     for u in event.followers:
         users.append(u)
-    for c in event.sponsor.events:
-        if c.id != event.id:
-            companies.append(c)
-    print(companies)
-    return render_template('event.html', title='Мероприятие', event=event, users=users, companies=companies, len=len(companies))
+    for e in event.sponsor.events:
+        if e.id != event.id:
+            other_events.append(e)
+    return render_template('event.html', title='Мероприятие', event=event, users=users, other_events=other_events,
+                           len=len(other_events))
 
 
 @app.route('/subs/<event>')
@@ -155,6 +154,22 @@ def edit_profile():
         form.date.data = current_user.date
     return render_template('edit_profile.html', title='Редактирование профиля',
                            form=form)
+
+@app.route('/event/<id>/accrual_points',  methods=['GET', 'POST'])
+@login_required
+def accrual_points(id):
+    form = AccrualPointsForm()
+    print(form.uchastie)
+    event = Event.query.filter_by(id=id).first_or_404()
+    users = []
+    other_events = []
+    for u in event.followers:
+        users.append(u)
+    for e in event.sponsor.events:
+        if e.id != event.id:
+            other_events.append(e)
+    return render_template('accrual_points.html', title='Начисление баллов участникам', event=event, users=users,
+                           other_events=other_events, len=len(other_events), form=form)
 
 @app.route('/oops/')
 

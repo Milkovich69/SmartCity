@@ -3,7 +3,7 @@
 {% block app_content %}
 <div class="container">
     <div class="d-flex justify-content-center h-100">
-        <div class="card" style="height: 400px;width: 800px;margin-top: 40px;">
+        <div class="card" style="height: 500px;width: 800px;margin-top: 40px;">
             <div class="card-header" style="width: 800px;">
                 <table>
                     <tr valign="top">
@@ -11,6 +11,13 @@
                             <div class="d-flex justify-content-center links" style="margin-left: 30px;" color="white">
                                 <h3>Организатор:
                                     <a href="{{ url_for('company', id=event.company_id) }}">{{ event.sponsor.name }}</a></h3>
+                            </div>
+                            <div class="panel-body">
+                                <div style="float: right">
+                            {% if event.sponsor.agent_id == current_user.id %}
+                                <p><a href="{{ url_for('accrual_points', id=event.id) }}" class="btn float-right login_btn">Начислить баллы участникам</a></p>
+                            {% endif %}
+                                </div>
                             </div>
                             {% if event.place %} <p>Место проведения: {{ event.place }}</p> {% endif %}
                             {% if event.date_event %} <p>Дата проведения: {{ event.date_event }}</p> {% endif %}
@@ -26,8 +33,8 @@
                             {% if len>0 %}
                             <div class="d-flex justify-content-center links" style="margin-left: 30px;" color="white">
                             <p>Другие мероприятия этой организации:</p>
-                            {% for c in companies %}
-                                <p><b><a href="{{ url_for('event', id=c.id) }}"> {{ c.name }}</a></b></p>
+                            {% for e in other_events %}
+                                <p><b><a href="{{ url_for('event', id=e.id) }}"> {{ e.name }}</a></b></p>
                             {% endfor %}
                             {% endif %}
                             </div>

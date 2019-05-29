@@ -14,7 +14,8 @@ def load_user(id):
 followers = db.Table(
     'followers',
     db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
-    db.Column('event_id', db.Integer, db.ForeignKey('event.id'))
+    db.Column('event_id', db.Integer, db.ForeignKey('event.id')),
+    db.Column('participation', db.Boolean)
     )
 
 
@@ -68,6 +69,7 @@ class User(UserMixin, db.Model):
         except:
             return
         return User.query.get(id)
+
 
 class Event(db.Model):
     id = db.Column(db.Integer, primary_key=True)

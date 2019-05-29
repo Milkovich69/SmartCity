@@ -3,6 +3,10 @@ from wtforms import IntegerField, StringField, PasswordField, BooleanField, Subm
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
 from app.models import User
 
+class AccrualPointsForm(FlaskForm):
+    uchastie = BooleanField('Участвовал')
+    submit = SubmitField('Начислить баллы')
+
 class LoginForm(FlaskForm):
     username = StringField('Логин', validators=[DataRequired()])
     password = PasswordField('Пароль', validators=[DataRequired()])
