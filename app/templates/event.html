@@ -21,6 +21,7 @@
                             </div>
                             {% if event.place %} <p>Место проведения: {{ event.place }}</p> {% endif %}
                             {% if event.date_event %} <p>Дата проведения: {{ event.date_event }}</p> {% endif %}
+                            {% if event.description %} <p>Описание: {{event.description }} </p> {% endif %}
                             {% if event.b_count %} <p>Баллы за участие: {{ event.b_count }}</p> {% endif %}
                             <div class="d-flex justify-content-center links" style="margin-left: 30px;" color="white">
                                 {% if not users %} <p>Пока нет ни одного подписчика</p>

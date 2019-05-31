@@ -26,7 +26,7 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(128))
     last_name = db.Column(db.String(100))
     first_name = db.Column(db.String(50))
-    date = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    date = db.Column(db.Date, index=True, default=datetime.utcnow)
     sum_b = db.Column(db.Integer)
     company = db.relationship('Company', backref='agent', lazy='dynamic')
 
@@ -75,7 +75,8 @@ class Event(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100))
     place = db.Column(db.String(100))
-    date_event = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    date_event = db.Column(db.Date, index=True, default=datetime.utcnow)
+    description = db.Column(db.String(255))
     b_count = db.Column(db.Integer)
     company_id = db.Column(db.Integer, db.ForeignKey('company.id'))
     followers = db.relationship(

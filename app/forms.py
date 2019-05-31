@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import IntegerField, StringField, PasswordField, BooleanField, SubmitField, DateField
-from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
+from wtforms import IntegerField, StringField, PasswordField, BooleanField, SubmitField, DateField, TextAreaField
+from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Length
 from app.models import User
 
 class AccrualPointsForm(FlaskForm):
@@ -45,6 +45,7 @@ class EventRegistrationForm(FlaskForm):
     name = StringField('Название')
     place = StringField('Место проведения')
     date_event = DateField('Дата проведения', format='%d.%m.%Y')
+    description = TextAreaField('Описание')
     b_count = IntegerField('Количество баллов за участие')
     submit = SubmitField('Добавить')
 

@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 from app import app, db
-from flask import render_template, flash, redirect, url_for, request
+from flask import render_template, flash, redirect, url_for, request, jsonify, Response
 from app.forms import LoginForm, RegistrationForm, EditProfileForm, ResetPasswordRequestForm, ResetPasswordForm, \
     CompanyRegistrationForm, EventRegistrationForm, AccrualPointsForm
 from flask_login import current_user, login_user, logout_user, login_required
 from app.models import User, Event, Company
 from werkzeug.urls import url_parse
 from app.email import send_password_reset_email
+import requests, json
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -48,7 +49,7 @@ def register():
     form = RegistrationForm()
     if form.validate_on_submit():
         user = User(username=form.username.data, email=form.email.data, last_name=form.last_name.data,
-                    first_name=form.first_name.data, date=form.date.data)
+                    first_name=form.first_name.data, date=form.date.data, sum_b=0)
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
@@ -80,7 +81,7 @@ def event_register():
     if form.validate_on_submit():
         company = Company.query.filter_by(agent_id=current_user.id).first()
         event = Event(name=form.name.data, place=form.place.data, date_event=form.date_event.data,
-                      b_count=form.b_count.data, company_id=company.id)
+                      description=form.description.data, b_count=form.b_count.data, company_id=company.id)
         db.session.add(event)
         db.session.commit()
         flash('Мероприятие добавлено!')
@@ -158,21 +159,49 @@ def edit_profile():
 @app.route('/event/<id>/accrual_points',  methods=['GET', 'POST'])
 @login_required
 def accrual_points(id):
-    form = AccrualPointsForm()
-    print(form.uchastie)
     event = Event.query.filter_by(id=id).first_or_404()
     users = []
     other_events = []
     for u in event.followers:
         users.append(u)
+    form = AccrualPointsForm(users)
+
     for e in event.sponsor.events:
         if e.id != event.id:
             other_events.append(e)
     return render_template('accrual_points.html', title='Начисление баллов участникам', event=event, users=users,
                            other_events=other_events, len=len(other_events), form=form)
+# 1. Извлечь из базы данных всех участников, и разместить их в виде чекбоксов
+# с подписями и id чекбокосов равными id пользователя и каким-то классом
+# 2. Создать функцию на js которая находит все чекбоксы, относящиеся к нашему классу getElementsByClass
+# создает объект result = {}
+# наполняет его значениями из чекбоксов result[id] = значение из чекбокса
+# отправляет полученный объект на сервер post('/points', result)
+# после получения ответа от сервера делает чекбоксы недоступным и отображает текст о том, что баллы начислены
+# 3. На сервере в routes добавляем /points в котором нужно извлечь объект (список id пользователей
+# со значениями True или  False) из запроса, Для тех пользователей у которых True - начислить баллы в базе данных и
+# отправить 'Ок' в ответ.
+
+@app.route('/event/<id>/points', methods=['POST'])
+@login_required
+def points(id):
+    event = Event.query.filter_by(id=id).first_or_404()
+    users = []
+    for u in event.followers:
+        users.append(u)
+    result = dict(request.form)
+    keys = []
+    for key, value in result.items():
+        if value == 'True':
+            keys.append(int(key))
+    print(keys)
+    for u in users:
+        if u.id in keys:
+            u.sum_b += event.b_count
+            db.session.commit()
+    return jsonify()
 
 @app.route('/oops/')
-
 def oops():
     return render_template('404.html')
 
