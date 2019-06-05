@@ -1,23 +1,22 @@
+<!DOCTYPE html>
 {% extends "base.html" %}
 
 @import url('https://fonts.googleapis.com/css?family=Numans');
 
 
 {% block app_content %}
+
+<html>
+<head>
 <h1 style="text-align:center; color: black; margin-left: 30px;">
     Привет, {{ current_user.first_name }}!
     Ты можешь участвовать в городских мероприятиях и получать баллы, которые можно обменять на бонусы!
 </h1>
-
-<!DOCTYPE html>
-<html>
-<head>
-
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
-
+</head>
+<body>
     <div class="container">
         {% for event in f_events %}
         <div class="row">
@@ -41,10 +40,11 @@
                                 <b><a href="subs/{{event.id}}" class="btn float-right login_btn">Подписаться</a></b>
                                     {% endif %}
                                     {% if current_user.is_following(event.id) %}
-                                    <b><a href="unsubs/{{event.id}}" class="btn float-right login_btn">Отписаться</a></b></div>
+                                    <b><a href="unsubs/{{event.id}}" class="btn float-right login_btn">Отписаться</a></b>
                                     {% endif %}
-                        </div>
 
+                            </div>
+                        </div>
                     </div>
             </div>
         </div>
@@ -56,8 +56,8 @@
 $(".spoiler-push").click(function() {
 $(this).parent().next().collapse('toggle');
 });
-
     </script>
-</head>
+
+</body>
 </html>
     {% endblock %}
