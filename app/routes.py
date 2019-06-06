@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 from app import app, db
-from flask import render_template, flash, redirect, url_for, request, jsonify, Response
+from flask import render_template, flash, redirect, url_for, request, jsonify
 from app.forms import LoginForm, RegistrationForm, EditProfileForm, ResetPasswordRequestForm, ResetPasswordForm, \
-    CompanyRegistrationForm, EventRegistrationForm, AccrualPointsForm
+    CompanyRegistrationForm, EventRegistrationForm
 from flask_login import current_user, login_user, logout_user, login_required
 from app.models import User, Event, Company, Points
 from werkzeug.urls import url_parse
 from app.email import send_password_reset_email
-import requests, json
 
 
 @app.route('/', methods=['GET', 'POST'])
