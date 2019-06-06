@@ -25,11 +25,11 @@ height: 300px;
 margin-top: auto;
 margin-bottom: auto;
 width: 400px;
-background-color: rgba(0,0,0,0.7) !important;
+background-color: rgba(0,0,0,0.8) !important;
 }
 
 .card p{
-color: yellow;
+color: orange;
 }
 
 .social_icon span{
@@ -103,7 +103,7 @@ color: white;
 }
 
 .links a{
-color: orange;
+color: yellow;
 margin-left: 4px;
 }
 
