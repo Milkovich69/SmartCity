@@ -4,7 +4,7 @@ from flask import render_template, flash, redirect, url_for, request, jsonify, R
 from app.forms import LoginForm, RegistrationForm, EditProfileForm, ResetPasswordRequestForm, ResetPasswordForm, \
     CompanyRegistrationForm, EventRegistrationForm, AccrualPointsForm
 from flask_login import current_user, login_user, logout_user, login_required
-from app.models import User, Event, Company
+from app.models import User, Event, Company, Points
 from werkzeug.urls import url_parse
 from app.email import send_password_reset_email
 import requests, json
@@ -117,8 +117,10 @@ def event(id):
     for e in event.sponsor.events:
         if e.id != event.id:
             other_events.append(e)
+    print(users)
+    points_available = event.points.count() == 0
     return render_template('event.html', title='Мероприятие', event=event, users=users, other_events=other_events,
-                           len=len(other_events))
+                           len=len(other_events), points_available=points_available)
 
 
 @app.route('/subs/<event>')
@@ -156,21 +158,20 @@ def edit_profile():
     return render_template('edit_profile.html', title='Редактирование профиля',
                            form=form)
 
-@app.route('/event/<id>/accrual_points',  methods=['GET', 'POST'])
+@app.route('/event/<id>/score_points',  methods=['GET', 'POST'])
 @login_required
-def accrual_points(id):
+def score_points(id):
     event = Event.query.filter_by(id=id).first_or_404()
     users = []
     other_events = []
     for u in event.followers:
         users.append(u)
-    form = AccrualPointsForm(users)
 
     for e in event.sponsor.events:
         if e.id != event.id:
             other_events.append(e)
-    return render_template('accrual_points.html', title='Начисление баллов участникам', event=event, users=users,
-                           other_events=other_events, len=len(other_events), form=form)
+    return render_template('score_points.html', title='Начисление баллов участникам', event=event, users=users,
+                           other_events=other_events, len=len(other_events))
 # 1. Извлечь из базы данных всех участников, и разместить их в виде чекбоксов
 # с подписями и id чекбокосов равными id пользователя и каким-то классом
 # 2. Создать функцию на js которая находит все чекбоксы, относящиеся к нашему классу getElementsByClass
@@ -194,12 +195,25 @@ def points(id):
     for key, value in result.items():
         if value == 'True':
             keys.append(int(key))
-    print(keys)
     for u in users:
         if u.id in keys:
+            point = Points(user_id=u.id, event_id=id, points=event.b_count)
+            db.session.add(point)
             u.sum_b += event.b_count
-            db.session.commit()
+    db.session.commit()
     return jsonify()
+
+
+@app.route('/event/<id>/points_awarded',  methods=['GET', 'POST'])
+@login_required
+def points_awarded(id):
+    event = Event.query.filter_by(id=id).first_or_404()
+    users = []
+    for p in Points.query.filter_by(event_id=id).all():
+        users.append(User.query.filter_by(id=p.user_id).first())
+    print(users)
+    return render_template('points_awarded.html', title='Начисленные баллы', event=event, users=users)
+
 
 @app.route('/oops/')
 def oops():

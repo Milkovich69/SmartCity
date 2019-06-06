@@ -6,6 +6,7 @@ from flask_login import UserMixin
 from hashlib import md5
 import jwt
 
+
 @login.user_loader
 def load_user(id):
     return User.query.get(int(id))
@@ -15,7 +16,6 @@ followers = db.Table(
     'followers',
     db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
     db.Column('event_id', db.Integer, db.ForeignKey('event.id')),
-    db.Column('participation', db.Boolean)
     )
 
 
@@ -29,6 +29,7 @@ class User(UserMixin, db.Model):
     date = db.Column(db.Date, index=True, default=datetime.utcnow)
     sum_b = db.Column(db.Integer)
     company = db.relationship('Company', backref='agent', lazy='dynamic')
+    points = db.relationship('Points', backref='user', lazy='dynamic')
 
     def avatar(self, size):
         digest = md5(self.email.lower().encode('utf-8')).hexdigest()
@@ -71,6 +72,12 @@ class User(UserMixin, db.Model):
         return User.query.get(id)
 
 
+class Points(db.Model):
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
+    event_id = db.Column(db.Integer, db.ForeignKey('event.id'), primary_key=True)
+    points = db.Column(db.Integer)
+
+
 class Event(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100))
@@ -82,6 +89,7 @@ class Event(db.Model):
     followers = db.relationship(
         'User', secondary=followers,
         backref=db.backref('followed_events', lazy='dynamic'), lazy='dynamic')
+    points = db.relationship('Points', backref='event', lazy='dynamic')
 
 
     def __repr__(self):

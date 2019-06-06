@@ -15,7 +15,10 @@
                             <div class="panel-body">
                                 <div style="float: right">
                             {% if event.sponsor.agent_id == current_user.id %}
-                                <p><a href="{{ url_for('accrual_points', id=event.id) }}" class="btn float-right login_btn">Начислить баллы участникам</a></p>
+                                <p><a {% if points_available %} href="{{ url_for('score_points', id=event.id) }}" {% else %}
+                                      href="{{ url_for('points_awarded', id=event.id) }}" {% endif %} class="btn float-right login_btn">
+                                    {% if points_available %}Начислить баллы участникам
+                                    {% else %}Посмотреть начисленные баллы {% endif %}</a></p>
                             {% endif %}
                                 </div>
                             </div>
