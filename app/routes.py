@@ -100,7 +100,7 @@ def user(username):
     p_events = []
     for p in participation:
         p_events.append(Event.query.filter_by(id=p.event_id).first())
-    return render_template('user.html', title='Мой профиль', user=user, events=events, company=company, p_events=p_events)
+    return render_template('user.html', title='Профиль', user=user, events=events, company=company, p_events=p_events)
 
 
 @app.route('/company/<id>')
