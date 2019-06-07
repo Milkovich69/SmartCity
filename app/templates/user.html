@@ -3,33 +3,44 @@
 {% block app_content %}
 <div class="container">
     <div class="d-flex justify-content-center h-100">
-        <div class="card" style="height: 420px;width: 800px;margin-top: 40px;">
-            <div class="card-header" style="width: 800px;">
+        <div class="card" style="height: 350px; width: 1100px; margin-top: 40px;">
+            <div class="card-header" style="width: 1100px;">
                 <table>
                     <tr valign="top">
-                        <td><img src="{{ user.avatar(128) }}" style=" margin-left: 30px; margin-top: 30px;">
-                        <p class="p111" style=" color: orange; text-align: center;">Рейтинг: {{ user.sum_b }}</p>
+                        <td><img src="{{ user.avatar(128) }}" style=" margin-left: 30px; padding-top: 40px;">
+                        <p class="p111" style=" color: orange; text-align: center; margin-left: 30px;">Рейтинг: {{ user.sum_b }}</p>
                         </td>
-                        <td style="padding-left: 30px;"><h1>Пользователь: {{ user.username }}</h1>
+                        <td style="padding-left: 30px; padding-right: 30px; padding-top: 10px;"><h1>Пользователь: {{ user.username }}</h1>
                             {% if user.last_name %} <p>Фамилия: {{ user.last_name }}</p>{% endif %}
                             {% if user.first_name %} <p>Имя: {{ user.first_name }}</p>{% endif %}
                             {% if user.date %} <p>Дата рождения: {{ user.date }}</p>{% endif %}
                             {% if user == current_user %}
                             <p><a href="{{ url_for('edit_profile') }}" class="btn float-right login_btn">Редактировать профиль</a></p>
                             {% if not company.name %}
-                                <p><a href="{{ url_for('company_register') }}" class="btn float-right login_btn">Зарегистрировать свое предприятие</a></p>
+                                <p ><a href="{{ url_for('company_register') }}" class="btn float-right login_btn">Зарегистрировать свое предприятие</a></p>
                             {% endif %} {% endif %}
                             {% if company.name %}
+                            <p> Мое предприятие:</p>
                                 <div class="d-flex justify-content-center links" style="margin-left: 30px;" color="white">
-                                    <p> Мое предприятие:
-                                        <b><a href="{{ url_for('company', id=company.id) }}">{{ company.name }}</a></b>
-                                    </p>
+                                    <p><b><a href="{{ url_for('company', id=company.id) }}">{{ company.name }}</a></b></p>
                                 </div>
                             {% endif %}
+                        </td>
+                        <td style="padding-left: 20px; padding-right: 20px; padding-top: 30px; border: 1px solid yellow; border-bottom: none; border-top: none;">
                             <div class="d-flex justify-content-center links" style="margin-left: 30px;" color="white">
-                            <p>Мероприятия, в которых я хочу участвовать:</p>
+                            <h4 style="text-align: center;">Мероприятия, в которых я хочу участвовать:</h4>
                             {% for event in events %}
-                            <p><b><a href="{{ url_for('event', id=event.id) }}">{{ event.name }}</a></b></p>
+                                {% if event not in p_events %}
+                            <p style="text-align: center;"><b><a href="{{ url_for('event', id=event.id) }}">{{ event.name }}</a></b></p>
+                                {% endif %}
+                                {%endfor%}
+                            </div>
+                        </td>
+                        <td style="padding-left: 20px; padding-right: 20px; padding-top: 30px; border: 1px solid yellow; border-bottom: none; border-top: none; border-right: none;">
+                            <div class="d-flex justify-content-center links" style="margin-left: 30px;" color="white">
+                            <h4 style="text-align: center;">Мероприятия, в которых я принимал(а) участие:</h4>
+                            {% for event in p_events %}
+                            <p style="text-align: center;"><b><a href="{{ url_for('event', id=event.id) }}">{{ event.name }}</a></b> {{ event.b_count }} б.</p>
                             {%endfor%}
                             </div>
                         </td>

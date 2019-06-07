@@ -94,7 +94,13 @@ def user(username):
     user = User.query.filter_by(username=username).first_or_404()
     events = current_user.followed_events
     company = Company.query.filter_by(agent_id=current_user.id).first()
-    return render_template('user.html', title='Мой профиль', user=user, events=events, company=company)
+    participation = []
+    for p in Points.query.filter_by(user_id=user.id).all():
+        participation.append(p)
+    p_events = []
+    for p in participation:
+        p_events.append(Event.query.filter_by(id=p.event_id).first())
+    return render_template('user.html', title='Мой профиль', user=user, events=events, company=company, p_events=p_events)
 
 
 @app.route('/company/<id>')
@@ -116,7 +122,6 @@ def event(id):
     for e in event.sponsor.events:
         if e.id != event.id:
             other_events.append(e)
-    print(users)
     points_available = event.points.count() == 0
     return render_template('event.html', title='Мероприятие', event=event, users=users, other_events=other_events,
                            len=len(other_events), points_available=points_available)
@@ -210,7 +215,6 @@ def points_awarded(id):
     users = []
     for p in Points.query.filter_by(event_id=id).all():
         users.append(User.query.filter_by(id=p.user_id).first())
-    print(users)
     return render_template('points_awarded.html', title='Начисленные баллы', event=event, users=users)
 
 

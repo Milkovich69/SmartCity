@@ -2,7 +2,7 @@
 
 html,body{
 
-background-image: url('http://www.bashinform.ru/upload/img_res1280/ac43d98acb2fc3e8/IMG_4518_JPG_crop1529321045_ejw_1280.jpg');
+background-image: url('https://www.artsfon.com/pic/201410/1920x1080/artsfon.com-25512.jpg');
 background-size: cover;
 background-repeat: no-repeat;
 background-attachment: fixed;
@@ -25,7 +25,7 @@ height: 300px;
 margin-top: auto;
 margin-bottom: auto;
 width: 400px;
-background-color: rgba(0,0,0,0.8) !important;
+background-color: rgba(0, 0, 0, 0.6) !important;
 }
 
 .card p{
