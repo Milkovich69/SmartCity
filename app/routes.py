@@ -92,8 +92,8 @@ def event_register():
 @login_required
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()
-    events = current_user.followed_events
-    company = Company.query.filter_by(agent_id=current_user.id).first()
+    events = user.followed_events
+    company = Company.query.filter_by(agent_id=user.id).first()
     participation = []
     for p in Points.query.filter_by(user_id=user.id).all():
         participation.append(p)
@@ -220,7 +220,7 @@ def points_awarded(id):
 
 @app.route('/oops/')
 def oops():
-    return render_template('404.html')
+    return render_template('500.html')
 
 @app.route('/reset_password_request', methods=['GET', 'POST'])
 def reset_password_request():

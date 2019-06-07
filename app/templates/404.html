@@ -1,6 +1,11 @@
 {% extends "base.html" %}
 
 {% block app_content %}
-    <h1>Упс! Страница не найдена!</h1>
-    <p><a href="{{ url_for('index') }}">Назад</a></p>
+<div class="container">
+    <h1 style="color: yellow; text-align: center;">Упс! Страница не найдена!</h1>
+    <p style="text-align: center;"><img src="https://runect.ru/bitrix/templates/runect/img/404.png"></p>
+    <div class="d-flex justify-content-center links" style="margin-left: 30px; text-align: center;" color="white">
+          <h3><a href="{{ url_for('index') }}">Назад</a></h3>
+    </div>
+</div>
 {% endblock %}

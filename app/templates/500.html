@@ -1,7 +1,12 @@
 {% extends "base.html" %}
 
 {% block app_content %}
-    <h1>Упс! Ошибочка вышла!</h1>
-    <p>Администратор будет уведомлен, не переживайте:)</p>
-    <p><a href="{{ url_for('index') }}">Назад</a></p>
+<div class="container">
+    <h1 style="color: yellow; text-align: center;">Упс! Внутреняя ошибка сервера!</h1>
+    <h1 style="color: yellow; text-align: center;">Не беспокойтесь, администратор будет уведомлен!</h1>
+    <p style="text-align: center;"><img src="https://broaddrivehosting.net/wp-content/uploads/2018/06/error500.png" width="400" height="400"></p>
+    <div class="d-flex justify-content-center links" style="margin-left: 30px; text-align: center;" color="white">
+          <h3><a href="{{ url_for('index') }}">Назад</a></h3>
+    </div>
+</div>
 {% endblock %}

@@ -21,10 +21,10 @@ align-content: center;
 }
 
 .card{
-height: 300px;
+height: auto;
 margin-top: auto;
 margin-bottom: auto;
-width: 400px;
+width: 800px;
 background-color: rgba(0, 0, 0, 0.6) !important;
 }
 
@@ -55,6 +55,9 @@ color: white;
 color: white;
 }
 
+.card-header h2{
+color: white;
+}
 
 .social_icon{
 position: absolute;
